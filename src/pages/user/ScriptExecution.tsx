@@ -393,86 +393,82 @@ export default function ScriptExecution() {
                 </div>
 
                 <div className="flex flex-wrap gap-4">
-                  {script.status !== 'completed' && (
-                    <>
-                      <Button
-                        onClick={handleMarkComplete}
-                        className="gradient-primary"
-                      >
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Mark as Complete
+                  <Button
+                    onClick={handleMarkComplete}
+                    className="gradient-primary"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Mark as Complete
+                  </Button>
+
+                  <Dialog open={isIssueDialogOpen} onOpenChange={setIsIssueDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="destructive">
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        Raise Issue
                       </Button>
+                    </DialogTrigger>
+                    <DialogContent className="dropdown-content">
+                      <DialogHeader>
+                        <DialogTitle>Raise or Link Issue</DialogTitle>
+                        <DialogDescription>
+                          Create a new issue or link an existing one to this script
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label>Select Issue</Label>
+                          <Select value={selectedIssue} onValueChange={setSelectedIssue}>
+                            <SelectTrigger className="dropdown-content">
+                              <SelectValue placeholder="Select an option" />
+                            </SelectTrigger>
+                            <SelectContent className="dropdown-content">
+                              <SelectItem value="new">Create New Issue</SelectItem>
+                              {issues.filter(i => !i.scriptIds.includes(script.id)).map((issue) => (
+                                <SelectItem key={issue.id} value={issue.id}>
+                                  Issue #{issue.issueNumber}: {issue.title}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
 
-                      <Dialog open={isIssueDialogOpen} onOpenChange={setIsIssueDialogOpen}>
-                        <DialogTrigger asChild>
-                          <Button variant="destructive">
-                            <AlertTriangle className="h-4 w-4 mr-2" />
-                            Raise Issue
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="dropdown-content">
-                          <DialogHeader>
-                            <DialogTitle>Raise or Link Issue</DialogTitle>
-                            <DialogDescription>
-                              Create a new issue or link an existing one to this script
-                            </DialogDescription>
-                          </DialogHeader>
-                          
-                          <div className="space-y-4">
+                        {selectedIssue === "new" && (
+                          <>
                             <div className="space-y-2">
-                              <Label>Select Issue</Label>
-                              <Select value={selectedIssue} onValueChange={setSelectedIssue}>
-                                <SelectTrigger className="dropdown-content">
-                                  <SelectValue placeholder="Select an option" />
-                                </SelectTrigger>
-                                <SelectContent className="dropdown-content">
-                                  <SelectItem value="new">Create New Issue</SelectItem>
-                                  {issues.filter(i => !i.scriptIds.includes(script.id)).map((issue) => (
-                                    <SelectItem key={issue.id} value={issue.id}>
-                                      Issue #{issue.issueNumber}: {issue.title}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                              <Label htmlFor="issueTitle">Issue Title</Label>
+                              <Input
+                                id="issueTitle"
+                                value={newIssueTitle}
+                                onChange={(e) => setNewIssueTitle(e.target.value)}
+                                placeholder="Enter issue title"
+                              />
                             </div>
-
-                            {selectedIssue === "new" && (
-                              <>
-                                <div className="space-y-2">
-                                  <Label htmlFor="issueTitle">Issue Title</Label>
-                                  <Input
-                                    id="issueTitle"
-                                    value={newIssueTitle}
-                                    onChange={(e) => setNewIssueTitle(e.target.value)}
-                                    placeholder="Enter issue title"
-                                  />
-                                </div>
-                                <div className="space-y-2">
-                                  <Label htmlFor="issueDescription">Issue Description</Label>
-                                  <Textarea
-                                    id="issueDescription"
-                                    value={newIssueDescription}
-                                    onChange={(e) => setNewIssueDescription(e.target.value)}
-                                    placeholder="Describe the issue in detail"
-                                    rows={3}
-                                  />
-                                </div>
-                              </>
-                            )}
-
-                            <div className="flex gap-2">
-                              <Button onClick={handleRaiseIssue} disabled={!selectedIssue}>
-                                {selectedIssue === "new" ? "Create Issue" : "Link Issue"}
-                              </Button>
-                              <Button variant="outline" onClick={() => setIsIssueDialogOpen(false)}>
-                                Cancel
-                              </Button>
+                            <div className="space-y-2">
+                              <Label htmlFor="issueDescription">Issue Description</Label>
+                              <Textarea
+                                id="issueDescription"
+                                value={newIssueDescription}
+                                onChange={(e) => setNewIssueDescription(e.target.value)}
+                                placeholder="Describe the issue in detail"
+                                rows={3}
+                              />
                             </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </>
-                  )}
+                          </>
+                        )}
+
+                        <div className="flex gap-2">
+                          <Button onClick={handleRaiseIssue} disabled={!selectedIssue}>
+                            {selectedIssue === "new" ? "Create Issue" : "Link Issue"}
+                          </Button>
+                          <Button variant="outline" onClick={() => setIsIssueDialogOpen(false)}>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
 
                   <Button variant="outline" onClick={handleSave}>
                     <Save className="h-4 w-4 mr-2" />
