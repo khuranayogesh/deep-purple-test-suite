@@ -479,25 +479,42 @@ export default function ScriptExecution() {
             </Card>
           )}
 
-          {/* View Mode for completed scripts */}
-          {isViewMode && testScreenshots.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Test Screenshots</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {testScreenshots.map((screenshot) => (
-                    <ImageViewer
-                      key={screenshot.id}
-                      src={screenshot.path}
-                      alt={screenshot.filename}
-                      description={screenshot.description}
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+          {/* View Mode - Show remarks and screenshots for completed scripts */}
+          {isViewMode && (
+            <>
+              {remarks && (
+                <Card className="mb-6">
+                  <CardHeader>
+                    <CardTitle>Test Execution Remarks</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-sm whitespace-pre-wrap">
+                      {remarks}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {testScreenshots.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Test Screenshots</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {testScreenshots.map((screenshot) => (
+                        <ImageViewer
+                          key={screenshot.id}
+                          src={screenshot.path}
+                          alt={screenshot.filename}
+                          description={screenshot.description}
+                        />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </>
           )}
         </div>
       </main>
