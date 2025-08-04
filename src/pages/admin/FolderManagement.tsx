@@ -50,8 +50,8 @@ export default function FolderManagement() {
       } else {
         addFolder({
           name: folderName.trim(),
-          parentId: parentFolderId || undefined,
-          isSubfolder: !!parentFolderId
+          parentId: parentFolderId === "none" ? undefined : parentFolderId,
+          isSubfolder: parentFolderId !== "none"
         });
         toast({
           title: "Success",
@@ -74,7 +74,7 @@ export default function FolderManagement() {
   const handleEdit = (folder: FolderType) => {
     setEditingFolder(folder);
     setFolderName(folder.name);
-    setParentFolderId(folder.parentId || "");
+    setParentFolderId(folder.parentId || "none");
     setIsDialogOpen(true);
   };
 
@@ -97,7 +97,7 @@ export default function FolderManagement() {
 
   const resetForm = () => {
     setFolderName("");
-    setParentFolderId("");
+    setParentFolderId("none");
     setEditingFolder(null);
   };
 
@@ -150,7 +150,7 @@ export default function FolderManagement() {
                         <SelectValue placeholder="Select parent folder" />
                       </SelectTrigger>
                       <SelectContent className="dropdown-content">
-                        <SelectItem value="">None (Root Folder)</SelectItem>
+                        <SelectItem value="none">None (Root Folder)</SelectItem>
                         {mainFolders.map((folder) => (
                           <SelectItem key={folder.id} value={folder.id}>
                             {folder.name}
